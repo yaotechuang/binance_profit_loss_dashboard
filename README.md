@@ -46,7 +46,7 @@ client = Client(key, secret)
 pnl = profit_loss(market='BNB-USDT', client=client, showlog=True)
 ```
 
-![output](/output.PNG)
+![output](/output.png)
 
 #### Get the profit and loss chart of [crypto pair] every 30 days from 2020-01 to 2021-12
 
