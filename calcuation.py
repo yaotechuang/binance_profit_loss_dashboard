@@ -78,19 +78,14 @@ def profit_loss(market='BTC-USDT', start_date = '2020-01-01', end_date='2021-12-
     delta_quote = (df[qty_quote] * -df.side).sum()
 
     # Fees
-    fee_bnb = df[df.fee_coin == 'BNB'].fee.sum()
-    if asset_base != 'BNB':
-        df.loc[df.fee_coin == asset_base, 'fee'] = df[df.fee_coin == asset_base].fee * df[df.fee_coin == asset_base].price
-        fee_base = df[df.fee_coin == asset_base].fee.sum() + fee_bnb
-    else:        
-        fee_bnb = df[df.fee_coin == 'BNB'].fee.sum()
-        fee_base = fee_bnb
-    
-    fee_quote = df[df.fee_coin == asset_quote].fee.sum() + fee_bnb
+    fee_bnb = df[df.fee_coin == 'BNB'].fee.sum()    
+    fee_quote = -df.fee.sum()
+    fee_base  = -(df.fee / df.price).sum()
     
     # Totals
-    total_quote = (delta_quote - fee_quote)
-    total_base = (delta_base - fee_base)
+    total_percent = ((df[qty_quote][df.side == -1].sum() / (df[qty_quote][df.side == 1].sum())) - 1) * 100
+    total_base = (delta_base + delta_base * 0.002)
+    total_quote = (total_base * symbol_price)
     
     prices_time_utc = time.strftime('%Y-%m-%d %H:%M', time.gmtime(prices_time/1000))
     df.side = df.side.replace([1, -1], ['BUY', 'SELL'])
@@ -121,8 +116,8 @@ def profit_loss(market='BTC-USDT', start_date = '2020-01-01', end_date='2021-12-
         print(f"   Price {asset_quote}USDT: {usd_price}")
         print(f"   Price BNB{asset_quote}: {bnb_price}")
         print(f"\nTotal profit:")
+        print(f"   Total profit ({asset_base}): {round(total_base, 8)}, , {round(total_percent, 2)}%")
         print(f"   Total profit ({asset_quote}): {round(total_quote, 8)}")
-        print(f"   Total profit ({asset_base}): {round(total_base, 8)}")
 
     time.sleep(1)
     
