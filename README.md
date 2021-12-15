@@ -46,7 +46,7 @@ client = Client(key, secret)
 pnl = profit_loss(market='BNB-USDT', client=client, showlog=True)
 ```
 
-![output](/assets/images/output.png)
+![output](/output.PNG)
 
 #### Get the profit and loss chart of [crypto pair] every 30 days from 2020-01 to 2021-12
 
@@ -66,4 +66,4 @@ profilio_df = profilio_df.rename({'symbol':'stock_id'}, axis='columns')
 RealizedProfitLoss(profilio_df).run_dash()
 ```
 
-![Pnl DashBoard](/assets/images/dashboard.png)
+![Pnl DashBoard](/dashboard.png)
